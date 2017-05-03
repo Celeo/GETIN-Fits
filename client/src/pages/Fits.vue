@@ -14,16 +14,22 @@
           v-if="$store.getters.category === category.name"
         )
           ship-tab(v-for="ship in category.ships" v-bind:name="ship.name" v-bind:key="ship.name")
-      pre
-        code {{ ship.fit }}
+      section.section
+        div(v-html="markdown(ship.fit)")
 </template>
 
 <script>
+import marked from 'marked'
 import CategoryTab from '../components/CategoryTab'
 import ShipTab from '../components/ShipTab'
 
 import testCategories from './testData'
 
+
+const renderer = new marked.Renderer()
+renderer.heading = (text, level) => {
+  return `<h${level} class="title is-${level}">${text}</h${level}>`
+}
 
 export default {
   components: {
@@ -45,6 +51,11 @@ export default {
         }
       }
       return { fit: '' }
+    }
+  },
+  methods: {
+    markdown(s) {
+      return marked(s, { sanitize: true, renderer })
     }
   }
 }
