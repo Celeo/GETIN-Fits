@@ -9,6 +9,8 @@ const state = {
   token: null,
   name: null,
   inAlliance: false,
+  editor: false,
+  admin: false,
   category: 'PVE',
   ship: 'Rattlesnake',
   axios: axios.create()
@@ -20,6 +22,8 @@ const mutations = {
     state.token = token
     state.name = tokenData.name
     state.inAlliance = tokenData.inAlliance
+    state.editor = tokenData.editor
+    state.admin = tokenData.admin
     state.axios = axios.create({ headers: { Authorization: token } })
   },
 
@@ -55,6 +59,14 @@ const getters = {
 
   inAlliance(state) {
     return state.inAlliance
+  },
+
+  editor(state) {
+    return state.editor
+  },
+
+  admin(state) {
+    return state.admin
   },
 
   category(state) {

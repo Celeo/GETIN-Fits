@@ -9,11 +9,20 @@ class User(db.Model):
     name = db.Column(db.String, unique=True)
     corporation = db.Column(db.String)
     alliance = db.Column(db.String)
+    editor = db.Column(db.Boolean, default=False)
+    admin = db.Column(db.Boolean, default=False)
 
-    def __init__(self, name, corporation, alliance):
+    def __init__(self, name, corporation, alliance, editor=False, admin=False):
         self.name = name
         self.corporation = corporation
         self.alliance = alliance
+        self.editor = editor
+        self.admin = admin
+
+        # TODO remove test code ----------------
+        if name == 'Celeo Servasse':
+            self.editor = True
+            self.admin = True
 
     @property
     def is_authenticated(self):

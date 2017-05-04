@@ -20,6 +20,16 @@
             v-if="loggedIn"
           ) Fits
           router-link.nav-item.is-tab(
+            :to="{ name: 'Editor' }"
+            v-bind:class="{ 'is-active': $router.currentRoute.name == 'Editor' }"
+            v-if="$store.getters.editor"
+          ) Editor
+          router-link.nav-item.is-tab(
+            :to="{ name: 'Admin' }"
+            v-bind:class="{ 'is-active': $router.currentRoute.name == 'Admin' }"
+            v-if="$store.getters.admin"
+          ) Admin
+          router-link.nav-item.is-tab(
             :to="{ name: 'Logout' }"
             v-bind:class="{ 'is-active': $router.currentRoute.name == 'Logout' }"
             v-if="loggedIn"

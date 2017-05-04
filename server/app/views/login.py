@@ -38,7 +38,9 @@ class EVE_SSO_Resource(Resource):
             token_data = {
                 'name': char_name,
                 'corporation': corporation,
-                'inAlliance': user.in_alliance
+                'inAlliance': user.in_alliance,
+                'editor': user.editor,
+                'admin': user.admin
             }
             token = jwt.encode(token_data, config['SECRET_KEY'])
             print(f'Returning new token from {char_name}')
