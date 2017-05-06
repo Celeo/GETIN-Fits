@@ -45,3 +45,26 @@ class User(db.Model):
 
     def __str__(self):
         return '<User-{}>'.format(self.name)
+
+
+class Category(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    fits = db.relationship('Fit', backref='category', lazy='dynamic')
+
+    def __init__(self, name):
+        self.name = name
+
+
+class Fit(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    content = db.Column(db.String)
+
+    def __init__(self, name, category_id, content=''):
+        self.name = name
+        self.category_id = category_id
+        self.content = content

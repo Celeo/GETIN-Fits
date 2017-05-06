@@ -1,29 +1,35 @@
 <template lang="pug">
   section.section
     div.container
-      nav.nav.has-deep-shadow
-        div.nav-center
-          category-tab(
-            v-for="category in categories"
-            v-bind:key='category'
-            v-bind:data='category'
+      div(v-if="!error")
+        nav.nav.has-deep-shadow
+          div.nav-center
+            category-tab(
+              v-for="category in data"
+              v-bind:key='category'
+              v-bind:data='category'
+            )
+        nav.nav.has-deep-shadow
+          div.nav-center(
+            v-for="category in data"
+            v-if="$store.getters.category === category.name"
           )
-      nav.nav.has-deep-shadow
-        div.nav-center(
-          v-for="category in categories"
-          v-if="$store.getters.category === category.name"
-        )
-          ship-tab(v-for="ship in category.ships" v-bind:name="ship.name" v-bind:key="ship.name")
-      section.section
-        div(v-html="markdown(ship.fit)")
+            div(v-if="category.ships.length > 0")
+              ship-tab(v-for="ship in category.ships" v-bind:name="ship.name" v-bind:key="ship.name")
+            div(v-else)
+              a.nav-item No fits in this category
+        section.section
+          div(v-html="markdown(ship.fit)")
+      div(v-else)
+        server-error
 </template>
 
 <script>
+import Vue from 'vue'
 import marked from 'marked'
 import CategoryTab from '../components/CategoryTab'
 import ShipTab from '../components/ShipTab'
-
-import testCategories from './testData'
+import ServerError from '../components/ServerError'
 
 
 const renderer = new marked.Renderer()
@@ -34,16 +40,18 @@ renderer.heading = (text, level) => {
 export default {
   components: {
     CategoryTab,
-    ShipTab
+    ShipTab,
+    ServerError
   },
   data() {
     return {
-      categories: testCategories
+      data: [],
+      error: false
     }
   },
   computed: {
     ship() {
-      for (let category of this.categories) {
+      for (let category of this.data) {
         for (let ship of category.ships) {
           if (ship.name === this.$store.getters.ship) {
             return ship
@@ -56,7 +64,20 @@ export default {
   methods: {
     markdown(s) {
       return marked(s, { sanitize: true, renderer })
+    },
+    async loadData() {
+      try {
+        const response = await this.$store.getters.axios.get(`${Vue.config.SERVER_URL}fits`)
+        this.data = response.data
+        this.error = false
+      } catch (error) {
+        this.error = true
+        console.error(error)
+      }
     }
+  },
+  async created() {
+    await this.loadData()
   }
 }
 </script>
