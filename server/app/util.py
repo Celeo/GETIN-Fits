@@ -12,7 +12,6 @@ def authenticate(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         try:
-            print('Authenticating ...')
             token = request.headers['Authorization']
             token_data = jwt.decode(token, config['SECRET_KEY'])
             user = User.query.filter_by(name=token_data['name']).first()
