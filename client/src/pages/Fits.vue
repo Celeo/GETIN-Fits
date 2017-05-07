@@ -5,25 +5,24 @@
         nav.nav.has-deep-shadow
           div.nav-center
             category-tab(
-              v-for="category in data"
+              v-for="category in categories"
               v-bind:key='category'
               v-bind:data='category'
             )
         nav.nav.has-deep-shadow
           div.nav-center(
-            v-for="category in data"
+            v-for="category in categories"
             v-if="$store.getters.category === category.name"
           )
             ship-tab(
-              v-if="category.ships.length > 0"
-              v-for="ship in category.ships"
-              v-bind:name="ship.name"
-              v-bind:key="ship.name"
+              v-for="fit in fitsInCategory"
+              v-bind:name="fit.name"
+              v-bind:key="fit.name"
             )
-            div(v-if="category.ships.length === 0")
+            div(v-if="fitsInCategory.length === 0")
               a.nav-item No fits in this category
         section.section
-          div(v-html="markdown(ship.fit)")
+          div(v-html="markdown(fit.content)")
       div(v-else)
         server-error
 </template>
@@ -45,20 +44,28 @@ export default {
   },
   data() {
     return {
-      data: [],
+      categories: [],
+      fits: [],
       error: false
     }
   },
   computed: {
-    ship() {
-      for (let category of this.data) {
-        for (let ship of category.ships) {
-          if (ship.name === this.$store.getters.ship) {
-            return ship
-          }
+    fit() {
+      for (let fit of this.fits) {
+        if (fit.category === this.$store.getters.category && fit.name === this.$store.getters.ship) {
+          return fit
         }
       }
-      return { fit: '' }
+      return { content: '' }
+    },
+    fitsInCategory() {
+      let ret = []
+      for (let fit of this.fits) {
+        if (fit.category === this.$store.getters.category) {
+          ret.push(fit)
+        }
+      }
+      return ret
     }
   },
   methods: {
@@ -67,8 +74,9 @@ export default {
     },
     async loadData() {
       try {
-        const response = await this.$store.getters.axios.get(`${Vue.config.SERVER_URL}categories`)
-        this.data = response.data
+        const response = await this.$store.getters.axios.get(`${Vue.config.SERVER_URL}fits`)
+        this.categories = response.data.categories
+        this.fits = response.data.fits
         this.error = false
       } catch (error) {
         this.error = true

@@ -44,6 +44,16 @@ router.beforeEach((to, from, next) => {
       return
     }
   }
+  // If the user is attempting to get to the editor page and isn't an editor, redirect them
+  if (to.name === 'Editor' && !store.getters.editor) {
+    next({ name: 'Landing' })
+    return
+  }
+  // If the user is attempting to get to the admin page and isn't an admin, redirect them
+  if (to.name === 'Admin' && !store.getters.admin) {
+    next({ name: 'Landing' })
+    return
+  }
   next()
 })
 

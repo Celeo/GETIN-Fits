@@ -14,13 +14,16 @@
                   v-bind:key="fit.id"
                 ) \#{{ fit.id }}: {{ fit.name }}
           div.level-item(v-if="!refreshing")
-            b-field(label="Set the category")
+            b-field(label="Category")
               b-select(placeholder="select" v-model="categoryId" v-bind:disabled="selectedId === 0")
                 b-option(
                   v-for="category in categories"
                   v-bind:value="category.id"
                   v-bind:key="category.id"
                 ) {{ category.name }}
+          div.level-item(v-if="!refreshing")
+            b-field(label="Order")
+              b-input(v-model="order")
         div.level-right
           div.block
             button.button.is-success(v-if="selectedId" @click="save")
@@ -58,6 +61,7 @@ export default {
       categories: null,
       selectedId: 0,
       categoryId: 0,
+      order: 0,
       fitContent: '',
       refreshing: false
     }
@@ -89,7 +93,8 @@ export default {
       try {
         const data = {
           content: this.fitContent,
-          category_id: this.selectedCategory.id
+          category_id: this.selectedCategory.id,
+          order: this.order
         }
         await this.$store.getters.axios.put(`${Vue.config.SERVER_URL}fits/${this.selectedFit.id}`, data)
         await this.loadData()
@@ -119,6 +124,7 @@ export default {
             await this.loadData()
             this.selectedId = 0
             this.categoryId = 0
+            this.order = 0
             this.refreshing = true
             Vue.nextTick(() => {
               this.refreshing = false
@@ -168,6 +174,7 @@ export default {
     selectedId(newId) {
       this.fitContent = this.selectedFit.content
       this.categoryId = this.selectedFit.category_id
+      this.order = this.selectedFit.order
     }
   }
 }

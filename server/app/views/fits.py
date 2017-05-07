@@ -1,7 +1,7 @@
 from flask import request
 from flask_restful import Resource
 
-from ..util import authenticate
+from ..util import authenticate, restrict_editor
 from ..models import db, Fit, Category
 
 
@@ -16,18 +16,20 @@ class FitsResource(Resource):
                 'name': fit.name,
                 'category': fit.category.name,
                 'category_id': fit.category.id,
-                'content': fit.content
+                'content': fit.content,
+                'order': fit.order
             } for fit in Fit.query.all()
         ]
         category_list = [
             {
                 'id': category.id,
-                'name': category.name
+                'name': category.name,
+                'order': category.order
             } for category in Category.query.all()
         ]
         return {
-            'fits': sorted(fit_list, key=lambda e: e.order),
-            'categories': sorted(category_list, key=lambda e: e.order)
+            'fits': sorted(fit_list, key=lambda e: e['order']),
+            'categories': sorted(category_list, key=lambda e: e['order'])
         }
 
     def post(self):
@@ -35,22 +37,16 @@ class FitsResource(Resource):
         db.session.commit()
         return {}, 204
 
-    def put(self):
-        # TODO need more authentication on this endpoint as well
-        # TODO implement
-        return {}, 204
-
 
 class FitResource(Resource):
 
-    # TODO need to futher restrict access to
-    #   these 2 endpoints based on permissions
-    method_decorators = [authenticate]
+    method_decorators = [restrict_editor]
 
     def put(self, id):
         fit = Fit.query.get(id)
         fit.content = request.json['content']
         fit.category_id = request.json['category_id']
+        fit.order = request.json['order']
         db.session.commit()
         return {}, 204
 
