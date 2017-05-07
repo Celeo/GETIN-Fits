@@ -14,9 +14,13 @@
             v-for="category in data"
             v-if="$store.getters.category === category.name"
           )
-            div(v-if="category.ships.length > 0")
-              ship-tab(v-for="ship in category.ships" v-bind:name="ship.name" v-bind:key="ship.name")
-            div(v-else)
+            ship-tab(
+              v-if="category.ships.length > 0"
+              v-for="ship in category.ships"
+              v-bind:name="ship.name"
+              v-bind:key="ship.name"
+            )
+            div(v-if="category.ships.length === 0")
               a.nav-item No fits in this category
         section.section
           div(v-html="markdown(ship.fit)")
@@ -77,13 +81,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus" scoped>
-a.nav-item.is-tab.big
-  font-size 30px
-  padding-left 100px
-  padding-right 100px
-
-.has-deep-shadow
-  box-shadow 0 0 10px 2px rgba(10, 10, 10, 0.1)
-</style>

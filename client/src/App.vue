@@ -106,4 +106,12 @@ $link-focus-border: $primary;
 
 label.label
   font-weight 600 !important
+
+a.nav-item.is-tab.big
+  font-size 30px
+  padding-left 100px
+  padding-right 100px
+
+.has-deep-shadow
+  box-shadow 0 0 10px 2px rgba(10, 10, 10, 0.1)
 </style>

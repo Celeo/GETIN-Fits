@@ -51,10 +51,12 @@ class Category(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
+    order = db.Column(db.Integer)
     fits = db.relationship('Fit', backref='category', lazy='dynamic')
 
-    def __init__(self, name):
+    def __init__(self, name, order=100):
         self.name = name
+        self.order = order
 
 
 class Fit(db.Model):
@@ -63,8 +65,10 @@ class Fit(db.Model):
     name = db.Column(db.String)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     content = db.Column(db.String)
+    order = db.Column(db.Integer)
 
-    def __init__(self, name, category_id, content=''):
+    def __init__(self, name, category_id=None, content='', order=100):
         self.name = name
-        self.category_id = category_id
+        self.category_id = category_id or Category.query.first().id
         self.content = content
+        self.order = order
