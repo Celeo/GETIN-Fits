@@ -84,6 +84,10 @@ $link-focus-border: $primary;
   color: $white;
 }
 
+.button {
+  margin-left: 5px;
+}
+
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
 </style>
@@ -100,6 +104,6 @@ $link-focus-border: $primary;
 .fade-enter, .fade-leave-active
   opacity 0
 
-// .is-dark-orange
-//   background-color $dark-orange
+label.label
+  font-weight 600 !important
 </style>

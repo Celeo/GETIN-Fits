@@ -27,15 +27,11 @@
 <script>
 import Vue from 'vue'
 import marked from 'marked'
+import { renderer } from '../util'
 import CategoryTab from '../components/CategoryTab'
 import ShipTab from '../components/ShipTab'
 import ServerError from '../components/ServerError'
 
-
-const renderer = new marked.Renderer()
-renderer.heading = (text, level) => {
-  return `<h${level} class="title is-${level}">${text}</h${level}>`
-}
 
 export default {
   components: {
@@ -67,7 +63,7 @@ export default {
     },
     async loadData() {
       try {
-        const response = await this.$store.getters.axios.get(`${Vue.config.SERVER_URL}fits`)
+        const response = await this.$store.getters.axios.get(`${Vue.config.SERVER_URL}categories`)
         this.data = response.data
         this.error = false
       } catch (error) {

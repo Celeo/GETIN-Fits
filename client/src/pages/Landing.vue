@@ -28,5 +28,5 @@
 
 <style lang="stylus" scoped>
 section.span
-  height 70vh
+  height 80vh
 </style>
