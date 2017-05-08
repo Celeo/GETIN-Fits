@@ -15,10 +15,12 @@
               ) {{ user.name }}
           div(v-if="selectedId")
             p
-              strong {{ selectedUser.name }} is
+              strong {{ selectedUser.name }}
+              |  is
               span(v-if="selectedUser.editor")  an editor
               span(v-if="selectedUser.editor && selectedUser.admin")  and
               span(v-if="selectedUser.admin")  an admin
+              span(v-if="!selectedUser.editor && !selectedUser.admin")  neither an editor nor an admin
         div.column(v-if="selectedId")
           div.block
             button.button.is-success(

@@ -11,7 +11,7 @@ class UserResource(Resource):
 
     @marshal_with(User.resource_fields)
     def get(self):
-        return User.query.all()
+        return User.query.order_by('id').all()
 
     def post(self):
         user = User.query.get(int(request.json['id']))
