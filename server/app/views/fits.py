@@ -46,7 +46,7 @@ class FitResource(Resource):
         fit = Fit.query.get(id)
         fit.content = request.json['content']
         fit.category_id = request.json['category_id']
-        fit.order = request.json['order']
+        fit.order = int(request.json['order'])
         db.session.commit()
         return {}, 204
 

@@ -9,6 +9,7 @@ from .shared import eveapi, config
 from .views.login import EVE_SSO_Resource
 from .views.fits import FitsResource, FitResource
 from .views.admin import UserResource
+from .views.category import CategoriesResource, CategoryResource
 
 
 app = Flask(__name__)
@@ -42,3 +43,5 @@ api.add_resource(EVE_SSO_Resource, '/eve/sso')
 api.add_resource(FitsResource, '/fits')
 api.add_resource(FitResource, '/fits/<int:id>')
 api.add_resource(UserResource, '/admin')
+api.add_resource(CategoriesResource, '/categories')
+api.add_resource(CategoryResource, '/categories/<int:id>')

@@ -59,6 +59,7 @@ class Category(db.Model):
         'id': fields.Integer,
         'name': fields.String,
         'order': fields.Integer,
+        'has_linked_fits': fields.Boolean
     }
 
     id = db.Column(db.Integer, primary_key=True)
@@ -69,6 +70,10 @@ class Category(db.Model):
     def __init__(self, name, order=100):
         self.name = name
         self.order = order
+
+    @property
+    def has_linked_fits(self):
+        return self.fits.count() > 0
 
 
 class Fit(db.Model):

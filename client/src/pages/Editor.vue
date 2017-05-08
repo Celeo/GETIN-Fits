@@ -6,7 +6,7 @@
       nav.level
         div.level-left(v-if="fits !== null")
           div.level-item(v-if="!refreshing")
-            b-field(label="Select a fit to edit")
+            b-field(label="Select a fit")
               b-select(placeholder="select" v-model="selectedId")
                 b-option(
                   v-for="fit in fits"
@@ -23,18 +23,19 @@
                 ) {{ category.name }}
           div.level-item(v-if="!refreshing")
             b-field(label="Order")
-              b-input(v-model="order")
+              b-input(v-model="order" v-bind:disabled="selectedId === 0")
         div.level-right
-          div.block
-            button.button.is-success(v-if="selectedId" @click="save")
-              b-icon(icon="floppy-o")
-              span Save changes
-            button.button.is-danger(v-if="selectedId" @click="promptDelete")
-              b-icon(icon="trash-o")
-              span Delete fit
-            button.button.is-info(@click="createNew")
-              b-icon(icon="plus")
-              span Create new fit
+          div.level-item
+            div.block
+              button.button.is-success(v-if="selectedId" @click="save")
+                b-icon(icon="floppy-o")
+                span Save changes
+              button.button.is-danger(v-if="selectedId" @click="deleteFit")
+                b-icon(icon="trash-o")
+                span Delete fit
+              button.button.is-info(@click="createNew")
+                b-icon(icon="plus")
+                span Create new fit
       div.columns(v-if="selectedId !== 0")
         div#panel-input.column.is-half
           p.control
@@ -85,8 +86,8 @@ export default {
         this.categories = response.data.categories
         this.error = false
       } catch (error) {
-        this.error = true
         console.error(error)
+        this.error = true
       }
     },
     async save() {
@@ -103,19 +104,19 @@ export default {
           type: 'is-success'
         })
       } catch (error) {
+        console.error(error)
         this.$dialog.alert({
           message: 'There was an error saving the data',
           type: 'is-danger',
           hasIcon: true
         })
-        console.error(error)
       }
     },
-    async promptDelete() {
+    async deleteFit() {
       this.$dialog.confirm({
         title: 'Delete fit',
         message: 'Are you sure that you want to <strong>delete</strong> this fit? This cannot be undone.',
-        confirmText: 'Dlete',
+        confirmText: 'Delete',
         type: 'is-danger',
         hasIcon: true,
         onConfirm: async () => {
@@ -172,9 +173,15 @@ export default {
   },
   watch: {
     selectedId(newId) {
-      this.fitContent = this.selectedFit.content
-      this.categoryId = this.selectedFit.category_id
-      this.order = this.selectedFit.order
+      if (this.selectedFit) {
+        this.fitContent = this.selectedFit.content
+        this.categoryId = this.selectedFit.category_id
+        this.order = this.selectedFit.order
+      } else {
+        this.fitContent = ''
+        this.categoryId = -1
+        this.order = ''
+      }
     }
   }
 }
