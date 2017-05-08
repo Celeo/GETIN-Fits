@@ -30,6 +30,9 @@ class EVE_SSO_Resource(Resource):
                 user = User(char_name, corporation, alliance)
                 db.session.add(user)
             db.session.commit()
+            if not user.in_alliance:
+                print(f'${user.name} is not in the alliance, denying login')
+                return {}, 403
             token_data = {
                 'name': char_name,
                 'corporation': corporation,

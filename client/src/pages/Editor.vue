@@ -114,7 +114,7 @@ export default {
     async promptDelete() {
       this.$dialog.confirm({
         title: 'Delete fit',
-        message: 'Are you sure that you  want to <strong>delete</strong> this fit? This cannot be undone.',
+        message: 'Are you sure that you want to <strong>delete</strong> this fit? This cannot be undone.',
         confirmText: 'Dlete',
         type: 'is-danger',
         hasIcon: true,

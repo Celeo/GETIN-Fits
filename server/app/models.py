@@ -1,9 +1,20 @@
+from flask_restful import fields
+
 from .shared import db
 
 
 class User(db.Model):
 
     __tablename__ = 'getin_user'
+
+    resource_fields = {
+        'id': fields.Integer,
+        'name': fields.String,
+        'corporation': fields.String,
+        'alliance': fields.String,
+        'editor': fields.Boolean,
+        'admin': fields.Boolean,
+    }
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True)
@@ -18,11 +29,6 @@ class User(db.Model):
         self.alliance = alliance
         self.editor = editor
         self.admin = admin
-
-        # TODO remove test code ----------------
-        if name == 'Celeo Servasse':
-            self.editor = True
-            self.admin = True
 
     @property
     def is_authenticated(self):
@@ -49,6 +55,12 @@ class User(db.Model):
 
 class Category(db.Model):
 
+    resource_fields = {
+        'id': fields.Integer,
+        'name': fields.String,
+        'order': fields.Integer,
+    }
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     order = db.Column(db.Integer)
@@ -60,6 +72,14 @@ class Category(db.Model):
 
 
 class Fit(db.Model):
+
+    resource_fields = {
+        'id': fields.Integer,
+        'name': fields.String,
+        'category_id': fields.Integer,
+        'content': fields.String,
+        'order': fields.Integer,
+    }
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)

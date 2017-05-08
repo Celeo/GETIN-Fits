@@ -8,6 +8,7 @@ from .models import db
 from .shared import eveapi, config
 from .views.login import EVE_SSO_Resource
 from .views.fits import FitsResource, FitResource
+from .views.admin import UserResource
 
 
 app = Flask(__name__)
@@ -40,3 +41,4 @@ def index():
 api.add_resource(EVE_SSO_Resource, '/eve/sso')
 api.add_resource(FitsResource, '/fits')
 api.add_resource(FitResource, '/fits/<int:id>')
+api.add_resource(UserResource, '/admin')

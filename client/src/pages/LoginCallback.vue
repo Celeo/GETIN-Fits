@@ -2,12 +2,15 @@
   section.section
     div.container
       div.heading
-        h1.title(v-if="!error && processing") Finishing login ...
+        h1.title(v-if="!error && !denied && processing") Finishing login ...
         template
           div(v-if="error")
-            h1.title.red An error occurred with your login
+            h1.title An error occurred with your login
             h2.subtitle
               router-link(to="{ name: 'Login' }") Please log in again
+          div(v-if="denied")
+            h1.title Invalid access
+            h2.subtitle This app is restricted to members of the alliance
           div(v-if="!error && !processing && name")
             h1.title Login successful, redirecting you <strong>{{ name }}</strong>
 </template>
@@ -22,6 +25,7 @@ export default {
     return {
       processing: true,
       error: false,
+      denied: false,
       name: ''
     }
   },
@@ -38,13 +42,12 @@ export default {
       this.error = false
     } catch (err) {
       console.error(err)
-      this.error = true
+      if (err.response.status === 403) {
+        this.denied = true
+      } else {
+        this.error = true
+      }
     }
   }
 }
 </script>
-
-<style lang="stylus" scoped>
-.red
-  color $red
-</style>
