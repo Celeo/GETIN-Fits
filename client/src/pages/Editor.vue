@@ -12,7 +12,7 @@
                   v-for="fit in fits"
                   v-bind:value="fit.id"
                   v-bind:key="fit.id"
-                ) \#{{ fit.id }}: {{ fit.name }}
+                ) {{ fit.name }}
           div.level-item(v-if="!refreshing")
             b-field(label="Category")
               b-select(placeholder="select" v-model="categoryId" v-bind:disabled="selectedId === 0")
