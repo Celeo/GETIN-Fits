@@ -35,3 +35,5 @@ services:
     volumes:
       - ./client:/srv/app
       - /srv/app/node_modules
+    depends_on:
+      - server
