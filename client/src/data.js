@@ -31,6 +31,8 @@ const mutations = {
     state.token = null
     state.name = null
     state.inAlliance = false
+    state.editor = false
+    state.admin = false
     state.axios = axios.create()
   },
 
