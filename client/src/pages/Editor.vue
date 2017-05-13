@@ -23,7 +23,7 @@
                 ) {{ category.name }}
           div.level-item(v-if="!refreshing")
             b-field(label="Order")
-              b-input(v-model="order" v-bind:disabled="selectedId === 0")
+              b-input(v-model="order" type="number" v-bind:disabled="selectedId === 0")
         div.level-right
           div.level-item
             div.block
