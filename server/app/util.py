@@ -21,7 +21,7 @@ def authenticate(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         try:
-            if get_user_from_token:
+            if get_user_from_token():
                 return f(*args, **kwargs)
             abort(401)
         except:
